@@ -18,31 +18,44 @@ This repository is not a codebase, but a research project dedicated to design.
 
 
 ## 🎯 Функциональные требования (Functional Requirements)
-- publishing travel posts with photos, a short description and a link to a specific place of travel;
-- rating and comments of other travelers' posts;
-- Subscribe to other travelers to keep track of their activity;
-- Search for popular travel destinations and view posts from those locations;
-- View other travelers' feeds and user feeds based on subscriptions in reverse chronological order;
+- публикация постов из путешествий с фотографиями, небольшим описанием и привязкой к конкретному месту путешествия;
+- оценка и комментарии постов других путешественников;
+- подписка на других путешественников, чтобы следить за их активностью;
+- поиск популярных мест для путешествий и просмотр постов с этих мест;
+- просмотр ленты других путешественников и ленты пользователя, основанной на подписках в обратном хронологическом порядке;
 
 ## 📊 Нефункциональные требования (Non-Functional Requirements)
 - DAU (Daily Active Users): 10 000 000
-- Availability target: 99.99% uptime (SLA).
-- Disaster tolerance: Data replication in several regions (CIS).
-- The average user will make (posts, reactions, comments) -> (1, 10, 5) = 15 total actions
-- Location is CIS only
-- We always keep it
-- One user can have 1,000,000 subscribers
-- no more than 1 second for all actions (posts, reactions, comments)
+- Цель по доступности: 99.99% uptime (SLA).
+- Катастрофоустойчивость: Репликация данных в нескольких регионах (СНГ).
+- Пользователь в среднем будет делать (посты, реакции, комментарии) -> (1, 10, 5) = 15 действий в сумме
+- Локация только СНГ
+- Храним всегда
+- 1 000 000 подписчиков может быть у одного пользователя
+- Максимальная задержка при отображении списка постов по месту: 3000 мс.
+- Максимальная задержка при поиске популярных мест: 3000 мс.
+- Максимальная задержка при загрузке поста - 2000мс.
 
 
-## 📊 Load assessment
-- RPS = 10 000 000 * 15 / 86 400 -> (100 000) = 1500
-- RPS(posts) = 100
-- RPS(reactions) = 1000
-- RPS(comments) = 500
-### Traffic calculation
-- Traffic(posts) = 100 * (txt(20kb) + image(20mb) + meta(1mb) ) = 2.1gb
-- Traffic(reactions) = 1000 * (meta(1kb)) = 1mb
-- Traffic(comments) = 500 * (text(1kb) + meta(1kb) ) = 1000kb = 1mb
-### Calculation of simultaneous connections
+## 📊 Оценка нагрузки (Load assessment)
+- RPS(постов) = 100
+- RPS(реакции) = 1000
+- RPS(комментарии) = 500
+### Расчет трафика (Traffic calculation)
+- Трафик(постов) = 100 * ( text(20kb) + image(15mb) + meta(1kb) ) = 1.5gb
+- Трафик(реакции) = 1000 * (meta(1kb)) = 1mb
+- Трафик(комментарии) = 500 * ( text(1kb) + meta(1kb) ) = 1000kb = 1mb
+- Трафик(метаинформации - мета) = 1500RPS * 1kb = 1.5mb
+
+## 📊 Оценка нагрузки в сезон(Load assessment * 10)
+- RPS(постов) = 1000
+- RPS(реакции) = 10000
+- RPS(комментарии) = 5000
+### Расчет трафика в сезон (Traffic calculation * 10)
+- Трафик(постов) = 1.5gb * 10 = 15gb
+- Трафик(реакции) = 1mb * 10 = 10mb
+- Трафик(комментарии) = 1mb * 10 = 10mb
+- Трафик(метаинформации - мета) = 1.5mb * 10 = 15mb
+
+### Расчет одновременных соединений (Calculation of simultaneous connections)
 Connections = 10 000 000 * 0.1 = 1 000 000
