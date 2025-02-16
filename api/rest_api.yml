@@ -1,0 +1,267 @@
+openapi: 3.0.0
+
+tags:
+  - name: SocialNetwork
+
+info:
+  title: A social network for travelers API
+  description: Current API describes interaction with a social network for travelers
+  version: 1.0.0
+
+paths:
+  /create_new_post:
+    post:
+      summary: Create new post
+      description: Method for publishing travel posts with photos, a short description and a link to a specific place of travel;
+      tags:
+        - SocialNetwork
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                post_text:
+                  type: string
+                  description: create post
+                image_link:
+                  type: string
+                  description: link to image data
+              required:
+                - post_text
+      responses:
+        '200':
+          description: The post was successfully published
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: VALIDATION_ERROR
+                  message:
+                    type: string
+                    example: "All fields are required to fill in"
+        '500':
+          description: Error on the server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
+                  message:
+                    type: string
+                    example: "Error on the server. Please try again."
+  /users/{user_id}/follow:
+    post:
+      summary: User's subscription to another
+      description: Allows a user to subscribe to another user.
+      tags:
+        - SocialNetwork
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: ID of the current user (the one who subscribes)
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - follow_id
+              properties:
+                follow_id:
+                  type: integer
+                  description: The ID of the user that the current user is subscribing to.
+      responses:
+        '200':
+          description: Successful subscription
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User successfully followed."
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: VALIDATION_ERROR
+                  message:
+                    type: string
+                    example: "Invalid user_id or follow_id."
+        '500':
+          description: Ошибка на сервере
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
+                  message:
+                    type: string
+                    example: "Error when subscribing. Please try again later."
+                    
+  /feeds:
+    get:
+      summary: Viewing the feed of posts
+      description: Getting a feed of posts for all users.
+      tags:
+        - SocialNetwork
+      responses:
+        '200':
+          description: The post feed has been uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                      description: The ID of the user who posted the post
+                    post_id:
+                      type: integer
+                      description: Post ID
+                    place_info:
+                      type: integer
+                      description: ID of the place
+                    text:
+                      type: string
+                      description: the text of the post
+                    photos:
+                      type: array
+                      items:
+                        type: string
+                        description: Photo in Base64 format
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: VALIDATION_ERROR
+                  message:
+                    type: string
+                    example: "Request error"
+        '500':
+          description: Error on the server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
+                  message:
+                    type: string
+                    example: "Error loading the feed. Please try again later."
+  /places/search:
+    get:
+      summary: Search for vacation spots
+      description: Allows you to search for vacation spots according to the specified criteria.
+      tags:
+        - SocialNetwork
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Search string (for example, place name)
+          schema:
+            type: string
+        - name: location
+          in: query
+          required: false
+          description: Geographical location for more accurate search
+          schema:
+            type: string
+        - name: category
+          in: query
+          required: false
+          description: Location category (for example, beach, mountains)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Search results uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    place_id:
+                      type: integer
+                      description: Place ID
+                    name:
+                      type: string
+                      description: Place name
+                    category:
+                      type: string
+                      description: Location category
+                    location:
+                      type: string
+                      description: Location of the place
+                    photos:
+                      type: array
+                      items:
+                        type: string
+                        description: Photo in Base64 format
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: VALIDATION_ERROR
+                  message:
+                    type: string
+                    example: "Invalid request"
+        '500':
+          description: Error on the server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR
+                  message:
+                    type: string
+                    example: "Error when searching for places. Please try again later."
