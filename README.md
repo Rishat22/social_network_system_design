@@ -42,7 +42,8 @@ This repository is not a codebase, but a research project dedicated to design.
 - RPS(реакции) = 1000
 - RPS(комментарии) = 500
 ### Расчет трафика (Traffic calculation)
-- Трафик(постов) = 100 * ( text(20kb) + image(15mb) + meta(1kb) ) = 1.5gb
+- Трафик(изображений) = 100 * ( image(15mb) + meta(1kb) ) = 1.5gb
+- Трафик(постов) = 100 * ( text(20kb) + meta(1kb) ) = 2.1 mb
 - Трафик(реакции) = 1000 * (meta(1kb)) = 1mb
 - Трафик(комментарии) = 500 * ( text(1kb) + meta(1kb) ) = 1000kb = 1mb
 - Трафик(метаинформации - мета) = 1500RPS * 1kb = 1.5mb
@@ -57,5 +58,16 @@ This repository is not a codebase, but a research project dedicated to design.
 - Трафик(комментарии) = 1mb * 10 = 10mb
 - Трафик(метаинформации - мета) = 1.5mb * 10 = 15mb
 
-### Расчет одновременных соединений (Calculation of simultaneous connections)
+## Расчет одновременных соединений (Calculation of simultaneous connections)
 Connections = 10 000 000 * 0.1 = 1 000 000
+
+## Capacity
+- изображения = image(15mb) * 100 = 1.5gb
+1.5 gb * 86400 * 365 ~ 48pb
+- Данные постов (текст поста + комментарии + реакции + метаинформации)
+5.6mb * 86400 * 365 ~ 176tb
+HDD: 16 дисков по 3tb
+Общий RPS 1600 при скорости диска 100mb/s потребуются  16 дисков
+при 1.5gb трафика при скорости диска 100mb/s потребуются  15 дисков
+Чтобы уместить 48pb, если каждый диск 20TB, потребуется 2400 дисков
+SSD не даст прироста так как мы упираемся не в IOPS. Но мы можем сжимать изображения.
