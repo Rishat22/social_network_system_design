@@ -36,8 +36,8 @@ This repository is not a codebase, but a research project dedicated to design.
 - Максимальная задержка при поиске популярных мест: 3000 мс.
 - Максимальная задержка при загрузке поста - 2000мс.
 
-![Screenshot of the structure of the system elements](/database/data_structure.png)
-![Screenshot of the structure of the system elements](/database/allocation_by_databases.jpg)
+![Screenshot of the structure of the system elements](/images-diagrams/data_structure.png)
+![Screenshot of the structure of the system elements](/images-diagrams/allocation_by_databases.jpg)
 
 ## 📊 Оценка нагрузки (Load assessment)
 - RPS(постов) = 100
