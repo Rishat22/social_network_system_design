@@ -1,0 +1,36 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+' Основные компоненты
+Container(APIGateway, "API Gateway", "Nginx / Envoy", "Handles requests and forwards them to services")
+
+System_Boundary(coreSystem, "Core system") {
+Container(PostService, "Post Service", "FastAPI / Spring Boot", "Handles post creation, updates, and retrieval")
+Container(UserService, "User Service", "FastAPI / Spring Boot", "Manages users, authentication, and profiles")
+Container(CommentService, "Comment Service", "FastAPI / Spring Boot", "Handles comments on posts")
+Container(SearchEngine, "Search Engine", "Elasticsearch / OpenSearch", "Provides search capabilities for posts and locations")
+ContainerDb(PostgreSQL, "PostgreSQL", "Relational DB", "Stores users, posts, comments, and relationships")
+}
+
+
+' Связи между компонентами
+
+Rel(APIGateway, PostService, "Manages posts")
+Rel(APIGateway, UserService, "Manages users")
+Rel(APIGateway, CommentService, "Handles comments")
+
+' Взаимодействие сервисов
+Rel(PostService, PostgreSQL, "Stores posts")
+Rel(UserService, PostgreSQL, "Stores users and relationships")
+Rel(CommentService, PostgreSQL, "Stores comments")
+
+
+' Поиск и рекомендации
+Rel(PostService, SearchEngine, "Indexes posts and locations")
+Rel(SearchEngine, PostgreSQL, "Syncs data for search")
+
+
+
+@enduml
+
