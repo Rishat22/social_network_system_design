@@ -61,6 +61,7 @@ This repository is not a codebase, but a research project dedicated to design.
 ![Screenshot of the structure of the system elements](/images-diagrams/containers/media_system.svg)
 
 </div>
+
 ## 📊 Оценка нагрузки (Load assessment)
 - RPS(постов) = 100
 - RPS(реакции) = 1000
