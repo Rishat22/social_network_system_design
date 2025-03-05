@@ -36,9 +36,31 @@ This repository is not a codebase, but a research project dedicated to design.
 - Максимальная задержка при поиске популярных мест: 3000 мс.
 - Максимальная задержка при загрузке поста - 2000мс.
 
-![Screenshot of the structure of the system elements](/images-diagrams/data_structure.png)
-![Screenshot of the structure of the system elements](/images-diagrams/allocation_by_databases.jpg)
+**Api info:**
 
+![Screenshot of the structure of the system elements](/images-diagrams/data_structure.png)
+
+
+## 📊 Реализация дизайна C4 модели (Design overview)
+
+<div align="center">
+  
+**Level 1.** System context diagram
+	
+![Screenshot of the structure of the system elements](/images-diagrams/context.svg)
+
+**Level 2.** Core system container diagram
+![Screenshot of the structure of the system elements](/images-diagrams/containers/core_system.svg)
+
+**Level 2.** Analytics system container diagram
+
+![Screenshot of the structure of the system elements](/images-diagrams/containers/analytics_system.svg)
+
+**Level 2.** Media system container diagram
+
+![Screenshot of the structure of the system elements](/images-diagrams/containers/media_system.svg)
+
+</div>
 ## 📊 Оценка нагрузки (Load assessment)
 - RPS(постов) = 100
 - RPS(реакции) = 1000
