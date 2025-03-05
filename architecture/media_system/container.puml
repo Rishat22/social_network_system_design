@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+' Основные компоненты
+Container(WebMobileApp, "Web/Mobile App", "React Native / Flutter", "Frontend for users")
+
+System_Boundary(mediaBlock, "The block responsible for media information") {
+Container(ReverseProxy, "Reverse Proxy", "Nginx / Traefik", "Validates and controls file uploads")
+Container(CDN, "CDN", "CloudFront / Fastly", "Serves optimized images globally")
+ContainerDb(ObjectStorage, "S3 / MinIO", "Object Storage", "Stores images and other media files")
+}
+
+
+' Процесс загрузки изображений
+Rel(WebMobileApp, ReverseProxy, "Uploads image")
+Rel(ReverseProxy, ObjectStorage, "Validates and uploads image")
+Rel(ObjectStorage, CDN, "CDN caches and serves images")
+Rel(WebMobileApp, CDN, "Fetches images via URL")
+
+
+@enduml
+

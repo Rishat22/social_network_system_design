@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+' Основные компоненты
+Container(WebMobileApp, "Web/Mobile App", "React Native / Flutter", "Frontend for users")
+
+
+System_Boundary(analyticalBlock, "Analytical block") {
+Container(RecommendationService, "Recommendation Service", "Python / ML Model", "Generates personalized recommendations")
+Container(AnalyticsService, "Analytics Service", "Flink / Spark", "Processes user interactions for insights")
+ContainerDb(ClickHouse, "ClickHouse", "Analytical DB", "Stores user interactions for analytics and recommendations")
+}
+
+
+' Поиск и рекомендации
+Rel(RecommendationService, ClickHouse, "Analyzes user interactions")
+Rel(WebMobileApp, RecommendationService, "Fetches recommendations")
+
+' Аналитика
+Rel(WebMobileApp, AnalyticsService, "Sends user interactions")
+Rel(AnalyticsService, ClickHouse, "Stores analytics data")
+
+@enduml
+

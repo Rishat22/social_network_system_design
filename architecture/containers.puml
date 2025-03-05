@@ -1,0 +1,63 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+' Определение пользователей системы
+Person(user, "User", "Interacts with the system via web/mobile apps")
+
+' Основные компоненты
+Container(WebMobileApp, "Web/Mobile App", "React Native / Flutter", "Frontend for users")
+Container(APIGateway, "API Gateway", "Nginx / Envoy", "Handles requests and forwards them to services")
+
+System_Boundary(mediaBlock, "The block responsible for media information") {
+Container(ReverseProxy, "Reverse Proxy", "Nginx / Traefik", "Validates and controls file uploads")
+Container(CDN, "CDN", "CloudFront / Fastly", "Serves optimized images globally")
+ContainerDb(ObjectStorage, "S3 / MinIO", "Object Storage", "Stores images and other media files")
+}
+
+System_Boundary(analyticalBlock, "Analytical block") {
+Container(RecommendationService, "Recommendation Service", "Python / ML Model", "Generates personalized recommendations")
+Container(AnalyticsService, "Analytics Service", "Flink / Spark", "Processes user interactions for insights")
+ContainerDb(ClickHouse, "ClickHouse", "Analytical DB", "Stores user interactions for analytics and recommendations")
+}
+
+
+System_Boundary(mainSystem, "The main block with meta information") {
+Container(PostService, "Post Service", "FastAPI / Spring Boot", "Handles post creation, updates, and retrieval")
+Container(UserService, "User Service", "FastAPI / Spring Boot", "Manages users, authentication, and profiles")
+Container(CommentService, "Comment Service", "FastAPI / Spring Boot", "Handles comments on posts")
+Container(SearchEngine, "Search Engine", "Elasticsearch / OpenSearch", "Provides search capabilities for posts and locations")
+ContainerDb(PostgreSQL, "PostgreSQL", "Relational DB", "Stores users, posts, comments, and relationships")
+}
+
+
+' Связи между компонентами
+Rel(user, WebMobileApp, "Uses")
+Rel(WebMobileApp, APIGateway, "Sends requests")
+Rel(APIGateway, PostService, "Manages posts")
+Rel(APIGateway, UserService, "Manages users")
+Rel(APIGateway, CommentService, "Handles comments")
+
+' Взаимодействие сервисов
+Rel(PostService, PostgreSQL, "Stores posts")
+Rel(UserService, PostgreSQL, "Stores users and relationships")
+Rel(CommentService, PostgreSQL, "Stores comments")
+
+' Процесс загрузки изображений
+Rel(WebMobileApp, ReverseProxy, "Uploads image")
+Rel(ReverseProxy, ObjectStorage, "Validates and uploads image")
+Rel(ObjectStorage, CDN, "CDN caches and serves images")
+Rel(WebMobileApp, CDN, "Fetches images via URL")
+
+' Поиск и рекомендации
+Rel(PostService, SearchEngine, "Indexes posts and locations")
+Rel(SearchEngine, PostgreSQL, "Syncs data for search")
+Rel(PostService, RecommendationService, "Sends post data")
+Rel(RecommendationService, ClickHouse, "Analyzes user interactions")
+Rel(WebMobileApp, RecommendationService, "Fetches recommendations")
+
+' Аналитика
+Rel(WebMobileApp, AnalyticsService, "Sends user interactions")
+Rel(AnalyticsService, ClickHouse, "Stores analytics data")
+
+@enduml
+

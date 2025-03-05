@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+' Пользователь
+Person(user, "User", "A person using the system")
+
+' Клиентское приложение
+Container(WebMobileApp, "Web/Mobile App", "User devices", "Users interact with the system through mobile and web apps")
+
+' API Gateway
+Container(APIGateway, "API Gateway", "Software system", "Handles requests, load balancing, authentication, and rate limiting")
+
+' Сервис постов (PostgreSQL)
+ContainerDb(PostService, "PostgreSQL (Post Service)", "Database", "Stores posts, comments, and user interactions")
+
+' Хранилище изображений (S3 + CDN)
+Container(ImageStorage, "S3 + CDN", "Cloud Storage", "Stores and delivers images")
+
+' Взаимодействие между компонентами
+Rel(user, WebMobileApp, "Interacts with")
+Rel(WebMobileApp, APIGateway, "Sends API requests")
+Rel(APIGateway, PostService, "Reads/Writes posts and comments")
+Rel(APIGateway, ImageStorage, "Uploads and retrieves images")
+
+@enduml
+
